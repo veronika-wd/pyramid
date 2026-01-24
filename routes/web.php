@@ -5,14 +5,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/register', [RegisterController::class, 'registerForm'])->name('register.form-register');
+Route::get('/register', [RegisterController::class, 'registerForm'])->name('register');
 //Route::post('/register/{user}', [RegisterController::class, 'register'])->name('register');
 
-Route::get('/login', [LoginController::class, 'loginForm'])->name('login.form-login');
+Route::get('/login', [LoginController::class, 'loginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 //Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
