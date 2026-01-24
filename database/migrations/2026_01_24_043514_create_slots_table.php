@@ -12,7 +12,7 @@ return new class extends Migration
         Schema::create('slots', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class, 'owner_id');
-            $table->foreignIdFor(User::class, 'user_id');
+            $table->foreignIdFor(User::class, 'user_id')->nullable();
             $table->timestamps();
         });
     }

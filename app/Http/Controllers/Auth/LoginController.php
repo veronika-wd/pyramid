@@ -28,4 +28,10 @@ class LoginController extends Controller
 
         return redirect()->intended(route('profile.index'));
     }
+
+    public function logout(): RedirectResponse
+    {
+        Auth::logout();
+        return redirect()->intended(route('login'));
+    }
 }
