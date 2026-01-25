@@ -1,30 +1,40 @@
 @extends('theme')
-@section('title', 'Авторизация')
+@section('title', 'Регистрация')
 @section('content')
     <form class="w-25 m-auto" action="{{ route('register', $user) }}" method="post">
         @csrf
-        <img class="mb-4" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        <img class="mb-4" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72"
+             height="57">
+        <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+
         <div class="form-floating">
-            <input type="text" name="name" class="form-control" id="name">
+            <input type="text" name="name" id="name" class="form-control rounded-bottom-0" placeholder="Name">
             <label for="name">Name</label>
         </div>
+
         <div class="form-floating">
-            <input type="text" name="login" class="form-control" id="login">
+            <input type="text" name="login" id="login" class="form-control rounded-top-0 rounded-bottom-0"
+                   placeholder="Login">
             <label for="login">Login</label>
         </div>
+
         <div class="form-floating">
-            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Password</label>
+            <input type="password" name="password" id="password" class="form-control rounded-top-0 rounded-bottom-0"
+                   placeholder="Password">
+            <label for="password">Password</label>
         </div>
+
         <div class="form-floating">
-            <input type="password" name="password_confirmation" class="form-control" id="confirm" placeholder="Password">
-            <label for="confirm">Confirmation password</label>
+            <input type="password" name="password_confirmation" id="password_confirmation"
+                   class="form-control rounded-top-0" placeholder="Password confirmation">
+            <label for="password_confirmation">Password confirmation</label>
         </div>
+
         <div class="form-check text-start my-3">
-            <input class="form-check-input" type="checkbox" name="remember" id="checkDefault">
-            <label class="form-check-label" for="checkDefault">Remember me</label>
+            <input type="checkbox" name="remember" id="remember" class="form-check-input">
+            <label for="remember" class="form-check-label">Remember me</label>
         </div>
-        <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+
+        <button class="btn btn-primary w-100 py-2" type="submit">Sign up</button>
     </form>
 @endsection

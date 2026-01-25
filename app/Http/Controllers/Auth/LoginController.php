@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
-use App\Models\User;
+use App\Http\Requests\Auth\LoginRequest;
 use Auth;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Redirect;
 
 class LoginController extends Controller
 {
@@ -20,18 +17,17 @@ class LoginController extends Controller
 
     public function login(LoginRequest $request): RedirectResponse
     {
-        $user = User::where('login', $request->login)->first();
+        if (Auth::attempt(['login' => $request->login, 'password' => $request->password], $request->boolean('remember'))) {
+            return redirect()->intended(route('profile.index'));
+        }
 
-        $remember = $request->remember ? 'true' : 'false';
-
-        Auth::login($user, $remember);
-
-        return redirect()->intended(route('profile.index'));
+        return redirect()->back()->withInput()->withErrors(['auth' => 'Неверный логин или пароль.']);
     }
 
     public function logout(): RedirectResponse
     {
         Auth::logout();
+
         return redirect()->intended(route('login'));
     }
 }

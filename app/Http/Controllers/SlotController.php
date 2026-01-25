@@ -12,15 +12,12 @@ class SlotController extends Controller
     {
         $user = $request->user();
 
-        if ($user->balance < 500){
-            return redirect()->back();
+        if ($user->balance < Slot::PRICE) {
+            return redirect()->back()->withErrors(['slot' => 'Недостаточно средств.']);
         }
 
-        Slot::create([
-            'owner_id' => $user->id,
-        ]);
-
-        $user->decrement('balance', 500);
+        Slot::create(['owner_id' => $user->id]);
+        $user->decrement('balance', Slot::PRICE);
 
         return redirect()->route('profile.index');
     }
