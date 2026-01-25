@@ -20,24 +20,23 @@ class RegisterController extends Controller
 
     public function register(RegisterRequest $request, User $user)
     {
-        if (!$user->slots()->whereNull('user_id')->exists()) {
+        $slot = $user->slots()->whereNull('user_id')->first();
+
+        if (!$slot) {
             abort(403);
         }
+
         $registerUser = User::create([
-            'name' => $request->input('name'),
-            'login' => $request->input('login'),
-            'password' => $request->input('password'),
+            'name' => $request->name,
+            'login' => $request->login,
+            'password' => $request->password,
             'referral_link' => Str::slug($request->name) . '-' . uniqid(),
             'parent_id' => $user->id,
         ]);
 
-        $user->slots()->whereNull('user_id')->first()->update([
-            'user_id' => $registerUser->id,
-        ]);
+        $slot->update(['user_id' => $registerUser->id]);
 
-        $remember = $request->remember ? 'true' : 'false';
-
-        Auth::login($registerUser, $remember);
+        Auth::login($registerUser, $request->boolean('remember'));
 
         return redirect()->intended(route('profile.index'));
     }
