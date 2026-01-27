@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
 
@@ -18,6 +17,7 @@ use Illuminate\Support\Collection;
  * @property int|null $parent_id
  *
  * @property-read Collection<Slot> $slots
+ * @property-read User $parent
  */
 class User extends Authenticatable
 {

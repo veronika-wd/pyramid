@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Slot extends Model
 {
     public const PRICE = 500;
+    public const PERCENTS = [.4, .3, .1];
 
     protected $guarded = ['id'];
 }
