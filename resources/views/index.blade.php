@@ -1,3 +1,4 @@
+@php use App\Models\User; @endphp
 @extends('theme')
 @section('title', 'Главная')
 @section('content')
@@ -27,23 +28,19 @@
         <h2>Слоты</h2>
 
         <div class="row row-col-3 gap-2">
+            @foreach($slots as $slot)
+                <div class="slot">
+                    <h4>{{ User::where('id', $slot->user_id) }}</h4>
+                </div>
+            @endforeach
             <form class="col slot" action="{{ route('slots.store') }}" method="post">
                 @csrf
-                <button type="submit">Слот 1</button>
-            </form>
-
-            <form class="col slot" action="{{ route('slots.store') }}" method="post">
-                @csrf
-                <button type="submit">Слот 2</button>
-            </form>
-
-            <form class="col slot" action="{{ route('slots.store') }}" method="post">
-                @csrf
-                <button type="submit">Слот 3</button>
+                <button type="submit">Купить слот</button>
             </form>
         </div>
 
-        @error('slot') <div class="mt-3 alert alert-danger">{{ $message }}</div> @enderror
+        @error('slot')
+        <div class="mt-3 alert alert-danger">{{ $message }}</div> @enderror
     </div>
 
     <hr/>
@@ -105,4 +102,7 @@
 
         <button type="submit" class="btn btn-success">Пополнить</button>
     </form>
+
+    <h2>Мои рефералы</h2>
+
 @endsection

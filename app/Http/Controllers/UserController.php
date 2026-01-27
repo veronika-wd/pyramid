@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('index');
+        $slots = $request->user()->slots;
+
+        dd($slots);
+        return view('index',[
+            'slots' => $slots,
+        ]);
     }
 }
