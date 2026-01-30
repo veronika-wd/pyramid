@@ -11,12 +11,14 @@
             <input type="text" name="login" id="login" class="form-control rounded-bottom-0" placeholder="Login"
                    value="{{ old('login') }}">
             <label for="login">Login</label>
+            @error('login') <p class="text text-danger">{{ $message }}</p> @enderror
         </div>
 
         <div class="form-floating">
             <input type="password" name="password" id="password" class="form-control rounded-top-0"
                    placeholder="Password">
             <label for="password">Password</label>
+            @error('password') <p class="text text-danger">{{ $message }}</p> @enderror
         </div>
 
         <div class="form-check text-start my-3">
@@ -27,6 +29,7 @@
         <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
 
         @error('auth')
-        <div class="mt-2 alert alert-danger">{{ $message }}</div> @enderror
+        <div class="mt-2 alert alert-danger">{{ $message }}</div>
+        @enderror
     </form>
 @endsection

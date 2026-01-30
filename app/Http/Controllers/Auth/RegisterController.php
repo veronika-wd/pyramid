@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Dtos\Auth\RegisterDto;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class RegisterController extends Controller
@@ -13,24 +14,22 @@ class RegisterController extends Controller
 
     public function registerForm(User $user)
     {
-        return view('auth.register', [
-            'user' => $user,
-        ]);
+        return view('auth.register', ['user' => $user]);
     }
 
-    public function register(RegisterRequest $request, User $user)
+    public function register(RegisterDto $dto, Request $request, User $user)
     {
         $slot = $user->slots()->whereNull('user_id')->first();
 
         if (!$slot) {
-            abort(403);
+            return redirect()->back()->withInput()->withErrors(['slot' => 'Нет доступных слотов.']);
         }
 
         $registerUser = User::create([
-            'name' => $request->name,
-            'login' => $request->login,
-            'password' => $request->password,
-            'referral_link' => Str::slug($request->name) . '-' . uniqid(),
+            'name' => $dto->name,
+            'login' => $dto->login,
+            'password' => $dto->password,
+            'referral_link' => Str::slug($dto->name) . '-' . uniqid(),
             'parent_id' => $user->id,
         ]);
 

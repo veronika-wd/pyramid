@@ -1,4 +1,4 @@
-@php use App\Models\User; @endphp
+@php @endphp
 @extends('theme')
 @section('title', 'Главная')
 @section('content')
@@ -52,24 +52,18 @@
             <thead>
             <tr>
                 <th>Действие</th>
-                <th>Сумма</th>
+                <th class="text-end">Сумма</th>
             </tr>
             </thead>
             <tbody>
             @foreach(auth()->user()->activityLogs as $log)
                 <tr>
-                    <td>
-                        @if($log->type === 'slot')
-                            Покупка слота
-                        @elseif($log->type === 'user')
-                            Реферал
-                        @else
-                            Пополнение баланса
-                        @endif
-                    </td>
-                    <td class="text {{ $log->balance >= 0 ? 'text-success' : 'text-danger' }}">
-                        {{ $log->balance }}
-                    </td>
+                    <td>{{ $log->type->label() }}</td>
+                    @if($log->balance >= 0)
+                        <td class="text text-end text-success">+{{ $log->balance }} ₽</td>
+                    @else
+                        <td class="text text-end text-danger">{{ $log->balance }} ₽</td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>

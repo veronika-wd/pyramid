@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Dtos\Auth\LoginDto;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
 use Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class LoginController extends Controller
@@ -15,9 +16,14 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function login(LoginRequest $request): RedirectResponse
+    public function login(LoginDto $dto, Request $request): RedirectResponse
     {
-        if (Auth::attempt(['login' => $request->login, 'password' => $request->password], $request->boolean('remember'))) {
+        if (
+            Auth::attempt([
+                'login' => $dto->login,
+                'password' => $dto->password
+            ], $request->boolean('remember'))
+        ) {
             return redirect()->intended(route('profile.index'));
         }
 
