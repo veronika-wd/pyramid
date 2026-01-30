@@ -43,24 +43,6 @@
         <div class="mt-3 alert alert-danger">{{ $message }}</div> @enderror
     </div>
 
-    <ul>
-        @foreach($firstLvl as $item)
-            <li>{{ $item->name }}</li>
-
-            <ul>
-                @foreach($secondLvl as $item)
-                    <li>{{ $item->name }}</li>
-                @endforeach
-
-                <ul>
-                    @foreach($thirdLvl as $item)
-                        <li>{{ $item->name }}</li>
-                    @endforeach
-                </ul>
-            </ul>
-        @endforeach
-    </ul>
-
     <hr/>
 
     <div class="" id="balance-history">
@@ -111,4 +93,25 @@
 
     <h2>Мои рефералы</h2>
 
+    <ul>
+        @foreach($referrals as $first)
+            <li>{{ $first->name }}</li>
+
+            @if($first->children->isNotEmpty())
+                <ul>
+                    @foreach($first->children as $second)
+                        <li>{{ $second->name }}</li>
+
+                        @if($second->children->isNotEmpty())
+                            <ul>
+                                @foreach($second->children as $third)
+                                    <li>{{ $third->name }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    @endforeach
+                </ul>
+            @endif
+        @endforeach
+    </ul>
 @endsection

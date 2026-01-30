@@ -18,6 +18,8 @@ use Illuminate\Support\Collection;
  *
  * @property-read Collection<Slot> $slots
  * @property-read User $parent
+ * @property-read Collection<ActivityLog> $activityLogs
+ * @property-read Collection<User> $children
  */
 class User extends Authenticatable
 {
@@ -45,5 +47,10 @@ class User extends Authenticatable
     public function activityLogs(): HasMany
     {
         return $this->hasMany(ActivityLog::class, 'user_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(User::class, 'parent_id');
     }
 }
