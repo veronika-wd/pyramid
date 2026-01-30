@@ -7,6 +7,8 @@ use App\Http\Controllers\SlotController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
+Route::redirect('/', '/login');
+
 Route::get('/register/{user:referral_link}', [RegisterController::class, 'registerForm'])->name('register');
 Route::post('/register/{user:referral_link}', [RegisterController::class, 'register'])->name('register');
 

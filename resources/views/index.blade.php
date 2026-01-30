@@ -30,7 +30,7 @@
         <div class="row row-col-3 gap-2">
             @foreach($slots as $slot)
                 <div class="slot">
-                    <h4>{{ User::where('id', $slot->user_id) }}</h4>
+                    {{--                    <h4>{{ User::where('id', $slot->user_id) }}</h4>--}}
                 </div>
             @endforeach
             <form class="col slot" action="{{ route('slots.store') }}" method="post">
@@ -56,34 +56,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Пополнение баланса с карты</td>
-                <td class="text-success">+1000</td>
-            </tr>
-            <tr>
-                <td>Пополнение баланса с карты</td>
-                <td class="text-success">+1000</td>
-            </tr>
-            <tr>
-                <td>Пополнение баланса с карты</td>
-                <td class="text-success">+1000</td>
-            </tr>
-            <tr>
-                <td>Покупка слота</td>
-                <td class="text-danger">-350</td>
-            </tr>
-            <tr>
-                <td>Начисление от реферала</td>
-                <td class="text-success">+150</td>
-            </tr>
-            <tr>
-                <td>Покупка слота</td>
-                <td class="text-danger">-350</td>
-            </tr>
-            <tr>
-                <td>Пополнение баланса с карты</td>
-                <td class="text-success">+1000</td>
-            </tr>
+            @foreach(auth()->user()->activityLogs as $log)
+                <tr>
+                    <td>
+                        @if($log->type === 'slot')
+                            Покупка слота
+                        @elseif($log->type === 'user')
+                            Реферал
+                        @else
+                            Пополнение баланса
+                        @endif
+                    </td>
+                    <td class="text {{ $log->balance >= 0 ? 'text-success' : 'text-danger' }}">
+                        {{ $log->balance }}
+                    </td>
+                </tr>
+            @endforeach
             </tbody>
         </table>
     </div>

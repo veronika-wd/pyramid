@@ -23,6 +23,8 @@ class SlotController extends Controller
         }
 
         $adminPercent = 1 - array_sum(Slot::PERCENTS);
+
+        /** @var User[] $superiors */
         $superiors = [
             $user->parent,
             $user->parent?->parent,
@@ -31,14 +33,27 @@ class SlotController extends Controller
 
         DB::transaction(function () use ($user, $superiors, $adminPercent) {
             $user->decrement('balance', Slot::PRICE);
-            Slot::create(['owner_id' => $user->id]);
+            $slot = Slot::create(['owner_id' => $user->id]);
+            $user->activityLogs()->create([
+                'type' => 'slot',
+                'balance' => -Slot::PRICE,
+            ]);
 
             foreach (Slot::PERCENTS as $index => $percent) {
                 $superiors[$index]?->increment('balance', Slot::PRICE * $percent);
+                $superiors[$index]?->activityLogs()->create([
+                    'type' => 'user',
+                    'balance' => Slot::PRICE * $percent,
+                ]);
             }
 
             if ($user->id !== 1) {
-                User::find(1)->increment('balance', Slot::PRICE * $adminPercent);
+                $admin = User::find(1);
+                $admin->increment('balance', Slot::PRICE * $adminPercent);
+                $admin->activityLogs()->create([
+                    'type' => 'user',
+                    'balance' => Slot::PRICE * $adminPercent,
+                ]);
             }
         });
 
