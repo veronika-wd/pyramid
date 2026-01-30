@@ -30,7 +30,7 @@
         <div class="row row-col-3 gap-2">
             @foreach($slots as $slot)
                 <div class="slot">
-                    {{--                    <h4>{{ User::where('id', $slot->user_id) }}</h4>--}}
+                    <h4>{{ $slot?->user?->name }}</h4>
                 </div>
             @endforeach
             <form class="col slot" action="{{ route('slots.store') }}" method="post">
@@ -42,6 +42,24 @@
         @error('slot')
         <div class="mt-3 alert alert-danger">{{ $message }}</div> @enderror
     </div>
+
+    <ul>
+        @foreach($firstLvl as $item)
+            <li>{{ $item->name }}</li>
+
+            <ul>
+                @foreach($secondLvl as $item)
+                    <li>{{ $item->name }}</li>
+                @endforeach
+
+                <ul>
+                    @foreach($thirdLvl as $item)
+                        <li>{{ $item->name }}</li>
+                    @endforeach
+                </ul>
+            </ul>
+        @endforeach
+    </ul>
 
     <hr/>
 

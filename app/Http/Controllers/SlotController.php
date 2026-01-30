@@ -33,7 +33,7 @@ class SlotController extends Controller
 
         DB::transaction(function () use ($user, $superiors, $adminPercent) {
             $user->decrement('balance', Slot::PRICE);
-            $slot = Slot::create(['owner_id' => $user->id]);
+            Slot::create(['owner_id' => $user->id]);
             $user->activityLogs()->create([
                 'type' => 'slot',
                 'balance' => -Slot::PRICE,
