@@ -4,12 +4,355 @@
     box-sizing: border-box;
 }
 
+.slots{
+    &__header{
+        display: flex;
+        justify-content: space-between;
+        margin: 10px;
+        align-items: center;
+    }
+}
+
 .slot {
-    background-color: grey;
+    background-color: #bababa;
     border-radius: 15px;
-    border: 4px dashed rgb(182, 181, 181);
+    border: 4px dashed rgb(113, 113, 113);
     padding: 80px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 700;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(71, 72, 76, 0.4);
+    }
+}
+
+// Variables
+$referral-tree-colors: (
+    level-1: #4a6ee0,
+    level-2: #6c757d,
+    level-3: #8a8d93
+);
+
+$referral-tree-bg: (
+    level-1: #f0f5ff,
+    level-2: #f8f9fa,
+    level-3: #ffffff
+);
+
+$referral-tree-border: (
+    level-1: #4a6ee0,
+    level-2: #dee2e6,
+    level-3: #e9ecef
+);
+
+$referral-tree-icon-size: 20px;
+$referral-tree-transition: all 0.3s ease;
+$referral-tree-border-radius: 8px;
+$referral-tree-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+// Base component
+.referral-tree {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    // Reset browser defaults for details/summary
+    details {
+        margin: 0;
+        padding: 0;
+    }
+
+    summary {
+        list-style: none;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::marker {
+            display: none;
+        }
+    }
+}
+
+// Item modifiers for each level
+.referral-tree__item {
+    margin-bottom: 4px;
+    border-radius: $referral-tree-border-radius;
+    overflow: hidden;
+    transition: $referral-tree-transition;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &--level-1 {
+        background-color: map-get($referral-tree-bg, level-1);
+        border: 1px solid map-get($referral-tree-border, level-1);
+        box-shadow: $referral-tree-shadow;
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 110, 224, 0.15);
+        }
+    }
+
+    &--level-2 {
+        background-color: map-get($referral-tree-bg, level-2);
+        border: 1px solid map-get($referral-tree-border, level-2);
+        margin-left: 32px;
+        margin-top: 4px;
+
+        &:hover {
+            border-color: darken(map-get($referral-tree-border, level-2), 10%);
+        }
+    }
+
+    &--level-3 {
+        background-color: map-get($referral-tree-bg, level-3);
+        border: 1px solid map-get($referral-tree-border, level-3);
+        margin-left: 64px;
+        margin-top: 2px;
+        border-radius: 6px;
+
+        &:hover {
+            background-color: darken(map-get($referral-tree-bg, level-3), 2%);
+        }
+    }
+}
+
+// Summary block
+.referral-tree__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: $referral-tree-transition;
+
+    // Common icon styling for all levels
+    &::before {
+        content: '';
+        position: absolute;
+        left: 20px;
+        width: $referral-tree-icon-size;
+        height: $referral-tree-icon-size;
+        background-size: contain;
+        background-repeat: no-repeat;
+        transition: $referral-tree-transition;
+    }
+
+    // Level-specific icon and colors
+    &--level-1 {
+        color: map-get($referral-tree-colors, level-1);
+        font-weight: 600;
+        font-size: 1.1rem;
+
+        &::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%234a6ee0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+        }
+
+        details[open] > &::before {
+            transform: translateY(-50%) rotate(90deg);
+        }
+    }
+
+    &--level-2 {
+        color: map-get($referral-tree-colors, level-2);
+        font-weight: 500;
+        font-size: 1rem;
+        padding: 12px 20px 12px 48px;
+
+        &::before {
+            left: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'%3E%3C/polyline%3E%3C/svg%3E");
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+        }
+
+        details[open] > &::before {
+            transform: translateY(-50%) rotate(90deg);
+        }
+    }
+
+    &--level-3 {
+        color: map-get($referral-tree-colors, level-3);
+        font-weight: 400;
+        font-size: 0.95rem;
+        padding: 10px 20px 10px 64px;
+        cursor: default;
+
+        &::before {
+            left: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%238a8d93'%3E%3Ccircle cx='12' cy='12' r='4'%3E%3C/circle%3E%3C/svg%3E");
+            width: 12px;
+            height: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+
+    // Hover effects
+    &:hover {
+        .referral-tree__name {
+            transform: translateX(2px);
+        }
+    }
+}
+
+// Content area (nested levels)
+.referral-tree__content {
+    padding: 0 20px 16px;
+    animation: referralTreeFadeIn 0.3s ease-out;
+
+    @keyframes referralTreeFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .referral-tree__item--level-2 {
+        margin-left: 28px;
+    }
+}
+
+// Name text
+.referral-tree__name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: $referral-tree-transition;
+    padding-left: 32px;
+
+    .referral-tree__summary--level-1 & {
+        padding-left: 32px;
+    }
+
+    .referral-tree__summary--level-2 & {
+        padding-left: 8px;
+    }
+
+    .referral-tree__summary--level-3 & {
+        padding-left: 0;
+    }
+}
+
+// Count badge
+.referral-tree__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: $referral-tree-transition;
+
+    .referral-tree__summary--level-1 & {
+        background-color: rgba(map-get($referral-tree-colors, level-1), 0.1);
+        color: map-get($referral-tree-colors, level-1);
+    }
+
+    .referral-tree__summary--level-2 & {
+        background-color: rgba(map-get($referral-tree-colors, level-2), 0.1);
+        color: map-get($referral-tree-colors, level-2);
+    }
+
+    .referral-tree__summary--level-3 & {
+        background-color: rgba(map-get($referral-tree-colors, level-3), 0.1);
+        color: map-get($referral-tree-colors, level-3);
+    }
+}
+
+// Empty state
+.referral-tree__empty {
+    padding: 20px;
+    text-align: center;
+    color: map-get($referral-tree-colors, level-2);
+    font-style: italic;
+    border: 2px dashed map-get($referral-tree-border, level-2);
+    border-radius: $referral-tree-border-radius;
+    margin: 10px 0;
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+    .referral-tree__item {
+        &--level-2 {
+            margin-left: 20px;
+        }
+
+        &--level-3 {
+            margin-left: 40px;
+        }
+    }
+
+    .referral-tree__summary {
+        padding: 14px 16px;
+
+        &--level-2 {
+            padding-left: 40px;
+        }
+
+        &--level-3 {
+            padding-left: 48px;
+        }
+
+        &::before {
+            left: 16px;
+        }
+    }
+
+    .referral-tree__name {
+        font-size: 0.95rem;
+    }
+}
+
+// Animation for opening/closing
+.referral-tree__item details {
+    &[open] {
+        animation: referralTreeOpen 0.3s ease;
+    }
+
+    @keyframes referralTreeOpen {
+        from {
+            opacity: 0.8;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+// Optional: Add user avatar/icon support
+.referral-tree__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid currentColor;
+    opacity: 0.8;
+
+    .referral-tree__summary--level-1 & {
+        border-width: 3px;
+    }
 }
